@@ -1,0 +1,87 @@
+  温湿度传感器：
+var sensorLib = require('node-dht-sensor');
+var DHT11_GPIO = 21;                       //GPIO端口
+var DHT11 = 11;                                 //传感器型号
+sensorLib.initialize(DHT11, DHT11_GPIO);
+const aliyunIot = require('aliyun-iot-device-sdk');
+const device = aliyunIot.device({
+productKey: "xxxxxxxxx", 
+deviceName: "xxxxxxxxx",
+deviceSecret: "xxxxxxxxxxxx"
+});
+//进行与平台连接，并执行连接后的业务循环
+device.on('connect', () => {
+console.log('connect succesfully!');
+const interval = setInterval(() => {
+var readout = sensorLib.read();
+const t = readout.temperature.toFixed(2);   //读温度
+const h = readout.humidity.toFixed(2)       //读湿度    
+console.log(`Post current temperature: ${t}`);
+console.log(`Post current humidity: ${h}`);
+device.postProps({
+CurrentTemperature: t,
+CurrentHumidity: h
+
+
+
+  超声波测距：
+import RPi.GPIO as GPIO
+import time
+
+def checkdist():
+
+#发出触发信号
+GPIO.output(2,GPIO.HIGH)                //输出端口
+#保持10us以上（我选择15us）
+ime.sleep(0.000015)
+GPIO.output(2,GPIO.LOW)
+while not GPIO.input(3):
+pass
+#发现高电平时开时计时
+t1 = time.time()
+while GPIO.input(3):
+pass
+#高电平结束停止计时
+t2 = time.time()
+#返回距离，单位为米
+return (t2-t1)*340/2
+
+GPIO.setmode(GPIO.BCM)                     //GPIO端口
+#第3号针，GPIO2
+GPIO.setup(2,GPIO.OUT,initial=GPIO.LOW)
+#第5号针，GPIO3
+GPIO.setup(3,GPIO.IN)
+
+time.sleep(2)
+try:
+while True:
+print 'Distance: %0.2f m' %checkdist()
+time.sleep(0.5)
+
+except KeyboardInterrupt:
+GPIO.cleanup()
+
+
+
+
+
+
+
+var exec = require(‘child_process’).exec;
+const aliyunIot = require('aliyun-iot-device-sdk');
+const device = aliyunIot.device({
+productKey: "xxxxxxxxx", 
+deviceName: "xxxxxxxxx",
+deviceSecret: "xxxxxxxxxxxx"
+});
+//进行与平台连接，并执行连接后的业务循环
+device.on('connect', () => {
+console.log('connect succesfully!');
+const interval = setInterval(() => {
+exec(‘python zff.py‘(err,stdout,stderr )) =>{  //自定义变量zff.py
+var A = stdout;                                  //自定义变量A
+console.log(A);
+device.postProps({
+CurrentDistance: A;
+});
+});
